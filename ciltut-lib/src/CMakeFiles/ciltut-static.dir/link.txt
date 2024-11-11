@@ -1,0 +1,2 @@
+/usr/bin/ar qc libciltut.a CMakeFiles/ciltut-static.dir/ciltut_libc.c.o CMakeFiles/ciltut-static.dir/tut4.c.o CMakeFiles/ciltut-static.dir/tut8.c.o CMakeFiles/ciltut-static.dir/tut6.c.o CMakeFiles/ciltut-static.dir/tut10.c.o
+/usr/bin/ranlib libciltut.a

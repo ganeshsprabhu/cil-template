@@ -33,11 +33,10 @@ let processOneFile (cil: C.file) : unit =
   if !(O.enable_tut.(8)) then Tut8.tut8 cil;
   if !(O.enable_tut.(9)) then Tut9.tut9 cil;
   if !(O.enable_tut.(10)) then Tut10.tut10 cil;
-  if !(O.enable_tut.(11)) then Tut11.tut11 cil;
+  (* if !(O.enable_tut.(11)) then Tut11.tut11 cil; *)
   if !(O.enable_tut.(12)) then Tut12.tut12 cil;
   if !(O.enable_tut.(13)) then Tut13.tut13 cil;
-  if !(O.enable_tut.(14)) then Tut14.tut14 cil;
-  if !(O.enable_tut.(15)) then Tut15.tut15 cil;
+  (* if !(O.enable_tut.(15)) then Tut15.tut15 cil; *)
   outputFile cil
 ;;
 

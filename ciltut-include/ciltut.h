@@ -1,12 +1,15 @@
 #ifndef _CILTUT_H_
 #define _CILTUT_H_
 
+extern size_t s;        // Declare s as extern
+extern struct option o; // Declare o as extern
+
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <getopt.h>  // Moved this up for better organization
 
 #define CONSTRUCTOR __attribute__((constructor))
-
 
 #define ExactRGB(r,g,b) __attribute__((ExactRGB((r),(g),(b))))
 #define LowerRGB(r,g,b) __attribute__((LowerRGB((r),(g),(b))))
@@ -14,15 +17,12 @@
 
 #define AddRGB(x,r,g,b) (typeof(x) ExactRGB(r,g,b))x
 
-
 #define red   __attribute__((red))
 #define green __attribute__((green))
 #define blue  __attribute__((blue))
 #define AddColor(c,x) (typeof(x) c)x
 
-
 #define cache_report if((void *__attribute__((cache_report)))0)
-
 
 #define invariant(c,i,...) __blockattribute__((invariant((c),(i),__VA_ARGS__)))
 #define post(c) __attribute__((post((c))))
@@ -37,22 +37,27 @@ uint64_t perf_get_cache_miss();
 void perf_deinit();
 uint64_t tut_get_time();
 
-
 void toggle_lock_tracking();
-
-#include <getopt.h>
-size_t s;
-struct option o;
 
 #ifdef __CILTUT__
 #pragma cilnoremove("getoptdummy")
 #endif
-static inline int getoptdummy()
+
+// Updated getoptdummy function
+static inline int getoptdummy(int argc, char *argv[])
 {
-  int i;
-  optarg = NULL;
-  sscanf(NULL,"%d",&i);
-  return getopt_long(0, NULL, NULL, NULL, NULL);
+    int i;
+    optarg = NULL;
+    sscanf(NULL, "%d", &i);
+    
+    // Define long options here (example)
+    static struct option long_options[] = {
+        {"option1", no_argument, 0, 'a'},
+        {"option2", required_argument, 0, 'b'},
+        {0, 0, 0, 0}
+    };
+
+    return getopt_long(argc, argv, "ab:", long_options, NULL);
 }
 
 #define ARG_HAS_OPT 1
@@ -61,16 +66,15 @@ static inline int getoptdummy()
 argtype argname; \
 int argname##got; \
 struct ciltut_##argname { \
-  char    *short_form; \
-  char    *help_text; \
-  char    *format; \
-  argtype  def; \
-  void    *requires; \
-  int      has_opt; \
+    char    *short_form; \
+    char    *help_text; \
+    char    *format; \
+    argtype  def; \
+    void    *requires; \
+    int      has_opt; \
 } __attribute__((ciltutarg, ##__VA_ARGS__)) _ciltut_##argname =
 
 #define arg_assert(e) (void *__attribute__((ciltut_assert((e)))))0
-
 
 #define autotest    __attribute__((autotest))
 #define instrument  __attribute__((instrument))
@@ -99,6 +103,7 @@ void register_nt_input(char *name, char *start);
 #ifdef __CILTUT__
 #pragma cilnoremove("autotest_finished")
 #endif
+
 extern int autotest_finished;
 void gen_new_input();
 
@@ -113,5 +118,3 @@ void return_pop(uint64_t p, uint64_t v);
 void autotest_reset();
 
 #endif 
-
-

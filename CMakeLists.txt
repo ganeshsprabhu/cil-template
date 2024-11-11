@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.6)
 project(cil-template)
 
+set(ENV{OPAM_SWITCH_PREFIX} "/home/iiitb/.opam/4.05.0")
+set(ENV{OCAMLFIND_CONF} "$ENV{OPAM_SWITCH_PREFIX}/lib/findlib.conf")
+message("CMAKE_INSTALL_PREFIX: " ${CMAKE_INSTALL_PREFIX})
+message("PPARGS: " ${PPARGS})
+
 include(CheckLibraryExists)
 
 if(NOT DEFINED CMAKE_ISNTALL_PREFIX)
@@ -45,25 +50,25 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 find_package(OCaml REQUIRED)
 include(UseOCaml)
 
-set(CILTUT_SRC src/tututil
-               src/ciltutoptions
-               src/tut0
-               src/tut1
-               src/tut2
-               src/tut3
-               src/tut4
-               src/tut5
-               src/tut6
-               src/tut7
-               src/tut8
-               src/tut9
-               src/tut10
-               src/tut11
-               src/tut12
-               src/tut13
-               src/tut14
-               src/tut15
-               src/main)
+set(CILTUT_SRC src/tututil.ml
+               src/ciltutoptions.ml
+               src/tut0.ml
+               src/tut1.ml
+               src/tut2.ml
+               src/tut3.ml
+               src/tut4.ml
+               src/tut5.ml
+               src/tut6.ml
+               src/tut7.ml
+               src/tut8.ml
+               src/tut9.ml
+               src/tut10.ml
+               # src/tut11.ml
+               src/tut12.ml
+               src/tut13.ml
+               src/tut14.ml
+               # src/tut15.ml
+               src/main.ml)
 
 set(CILTUT_PACKS unix str ocamlgraph cil)
 
@@ -85,8 +90,8 @@ foreach(PACK ${CILTUT_PACKS})
 endforeach()
 
 add_ocaml_executable(ciltutcc.exe
-                     OCAMLOPTS -pp "camlp4o pa_macro.cmo ${PPARGS}"
-                     OCAMLCOPTS -pp "camlp4o pa_macro.cmo ${PPARGS}"
+                     OCAMLOPTS "-verbose" "-pp" "camlp4o"
+                     OCAMLCOPTS "-verbose" "-pp" "camlp4o"
                      SOURCES ${CILTUT_SRC}
                      PACKAGES ${CILTUT_PACKS})
 
